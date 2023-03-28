@@ -5,7 +5,7 @@
 #' - Import data
 #' - Data processing
 #' - Binary classifier example
-#' - Validation
+#' - Technical validation (asthma symptoms)
 
 
 library(tidyverse)
@@ -14,8 +14,10 @@ library(caret)
 library(PRROC)
 library(ggpubr)
 
+###################
+## Import data ####
+###################
 
-# Import data ----
 daily_df        <- read.csv("anonym_aamos00_dailyquestionnaire.csv")
 endquest_df     <- read.csv("anonym_aamos00_endquestionnaire.csv")
 environment_df  <- read.csv("anonym_aamos00_environment.csv")
@@ -30,7 +32,12 @@ weekly_df       <- read.csv("anonym_aamos00_weeklyquestionnaire.csv")
 watch_activity_lookup <- readxl::read_excel("aamos00_data_dictionary.xlsx", sheet = "miband_activity_lookup")
 
 
+#######################
+## Data processing ####
+#######################
+
 # Smart peak flow meter data processing ----
+# Relates to anonym_aamos00_peakflow.csv
 # Calculate percentage of maximum PEF
 peakflow_day_df <- peakflow_df %>%
   group_by(user_key, date) %>%
@@ -44,6 +51,7 @@ peakflow_day_df <- peakflow_df %>%
 
 
 # Smart inhaler data processing ----
+# Relates to anonym_aamos00_smartinhaler.csv
 # Total daily relief inhaler usage
 inhaler_day_df <- inhaler_df %>%
   group_by(user_key, date) %>%
@@ -54,7 +62,8 @@ inhaler_day_df <- inhaler_df %>%
 
 
 # Smartwatch data processing ----
-# Use activity type lookup
+# Relates to anonym_aamos00_smartwatch1.csv , anonym_aamos00_smartwatch2.csv , anonym_aamos00_smartwatch3.csv
+# Use activity type lookup (sheet miband_activity_lookup of aamos00_data_dictionary.xlsx)
 # Convert minute-by-minute data into daily data
 # Extract daily steps, mean heart rate, minutes slept
 watch_df <- rbind(watch_df1, watch_df2, watch_df3)
@@ -74,6 +83,7 @@ watch_day_df <- watch_df %>%
 
 
 # Weekly questionnaire data processing ----
+# Relates to anonym_aamos00_weeklyquestionnaire.csv
 # Convert answers to dates
 adverse_events <- weekly_df %>%
   select(user_key, date, weekly_doc, weekly_hospital, weekly_er, weekly_oral) %>%
@@ -148,8 +158,14 @@ nrow(weekly_df       %>% distinct(user_key, date)) # 324  weekly questionnaires
 
 nrow(all_data_day_df %>% distinct(user_key, date)) # 2054 patient-days of data in AAMOS-00 phase 2
 
+#################################
+## Binary classifier example ####
+#################################
 
-# Binary classifier ----
+#' Reframing this data as binary classification problem, we illustrate how to
+#' train a classifier to classify weeks where patients attended unscheduled
+#' asthma doctor appointments using daily data.
+
 # Train linear (glm) model and random forest (rf) model
 # class variable = weekly_doc
 # section data into calendar weeks
@@ -257,7 +273,14 @@ png(filename = "rf_roc.png", width = 2000, height = 1500, res = 300, units = "px
 plot(test_rf_roc)
 dev.off()
 
-# Daily answers to questions for asthma control ----
+#' AUC = 0.93 and AUPRC = 0.55 suggesting a strong signal was present. Data had
+#' 15 positive class and 159 negative class.
+
+
+##############################################
+## Technical validation (asthma symptoms) ####
+##############################################
+
 # Consider all combinations of daily questions about asthma control:
 #  - daily_day_symp
 #  - daily_night_symp
@@ -319,3 +342,9 @@ rcp3_plot <- ggarrange(
 rcp3_plot
 
 ggsave("rcp3_plot.png",rcp3_plot, width = 2000, height = 2000, dpi=300, units = "px")
+
+#' Comparison of daily answers to questions for asthma control averaged over
+#' seven days (0=no on all days, 1=yes on all days). In line with previous
+#' understanding36, the day symptoms were almost always higher than night
+#' symptoms and activity limitation, whereas nocturnal symptoms and activity
+#' limitation were relatively independent.
