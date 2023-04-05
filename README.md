@@ -23,11 +23,14 @@ The `sci_data_AAMOS-00_start_up.R` file can be used to get started this dataset,
 
 The code is used to produce the plots and results presented in the "Technical Validation" of our Scientific Data paper.
 
-Begin by downloading all 12 files from [the DataShare page](https://doi.org/10.7488/ds/3775)
+Begin by downloading all 12 files from [the DataShare page](https://doi.org/10.7488/ds/3775). Then running all the lines of code in `sci_data_AAMOS-00_start_up.R` will produce all the plots and results. The `sci_data_AAMOS-00_start_up.R` file contains 4 sections (Import data, Data processing, Binary classifier example, Technical validation (asthma symptoms)), each section depends on the previous section.
+
 
 ## Licence
 
-*Creative Commons Attribution 4.0 International Public License.*
+Data is licensed under the *Creative Commons Attribution 4.0 International Public License.*
+
+The starter code is licensed under the *MIT License.*
 
 
 ## Getting In Touch
