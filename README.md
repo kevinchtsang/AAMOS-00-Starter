@@ -2,7 +2,7 @@
 
 Code to support the analysis of the [AAMOS-00 anonymised dataset](https://doi.org/10.7488/ds/3775).
 
-You can find further details about this dataset in the publication "Home Monitoring with Connected Mobile Devices for Asthma Attack Prediction with Machine Learning".
+You can find further details about this dataset in the publication "[Home Monitoring with Connected Mobile Devices for Asthma Attack Prediction with Machine Learning](https://doi.org/10.1038/s41597-023-02241-9)" - *Scientific Data, Nature*.
 
 
 ## AAMOS-00 Study 
@@ -21,7 +21,7 @@ The full data dictionary is available [via the DataShare website](https://datash
 
 The `sci_data_AAMOS-00_start_up.R` file can be used to get started this dataset, it includes joining data tables, data wrangling, and an example binary classification problem.
 
-The code is used to produce the plots and results presented in the "Technical Validation" of our Scientific Data paper.
+The code is used to produce the plots and results presented in the "Technical Validation" of our [Scientific Data paper](https://doi.org/10.1038/s41597-023-02241-9).
 
 Begin by downloading all 12 files from [the DataShare page](https://doi.org/10.7488/ds/3775). Then running all the lines of code in `sci_data_AAMOS-00_start_up.R` will produce all the plots and results. The `sci_data_AAMOS-00_start_up.R` file contains 4 sections (Import data, Data processing, Binary classifier example, Technical validation (asthma symptoms)), each section depends on the previous section.
 
